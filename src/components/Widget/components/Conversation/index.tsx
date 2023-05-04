@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Picker } from 'emoji-mart';
+// import { Picker } from 'emoji-mart';
 import cn from 'classnames';
 
 import Header from './components/Header';
@@ -120,10 +120,10 @@ function Conversation({
         showTimeStamp={showTimeStamp}
       />
       <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
-      {emojis && pickerStatus && (<Picker 
-        style={{ position: 'absolute', bottom: pickerOffset, left: '0', width: '100%' }}
-        onSelect={onSelectEmoji}
-      />)}
+      {/*{emojis && pickerStatus && (<><Picker*/}
+      {/*  style={{ position: 'absolute', bottom: pickerOffset, left: '0', width: '100%' }}*/}
+      {/*  onSelect={onSelectEmoji}*/}
+      {/*/></>)}*/}
       <Sender
         ref={senderRef}
         sendMessage={handlerSendMsn}
