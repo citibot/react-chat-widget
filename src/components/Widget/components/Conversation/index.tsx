@@ -123,7 +123,7 @@ function Conversation({
       />
       <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
       {emojis && pickerStatus && (<>
-        <Picker data={data} onEmojiSelect={onSelectEmoji} onClickOutside={togglePicker} />
+        <Picker data={data} onEmojiSelect={onSelectEmoji} onClickOutside={togglePicker} style={{ position: 'absolute', bottom: pickerOffset, left: '0', width: '100%' }} />
       </>)}
       <Sender
         ref={senderRef}
