@@ -1,10 +1,10 @@
 {
-  "name": "react-chat-widget",
-  "version": "3.1.5",
+  "name": "@bhupesh-sf/react-chat-widget",
+  "version": "1.0.0",
   "description": "Chat web widget for React apps",
   "main": "lib/index.js",
-  "repository": "git@github.com:Wolox/react-chat-widget.git",
-  "author": "Martín Callegari <martin.callegari@wolox.com.ar>",
+  "repository": "git@github.com:bhupesh-sf/react-chat-widget.git",
+  "author": "Bhupesh Gupta <bhupesh.gupta@sourcefuse.com>",
   "license": "MIT",
   "types": "./lib/index.d.ts",
   "scripts": {
@@ -19,6 +19,8 @@
     "javascript"
   ],
   "dependencies": {
+    "@emoji-mart/data": "^1.1.2",
+    "@emoji-mart/react": "^1.1.1",
     "classnames": "^2.2.6",
     "date-fns": "^2.11.1",
     "emoji-mart": "^5.5.2",

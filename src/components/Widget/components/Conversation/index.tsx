@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect } from 'react';
 // import { Picker } from 'emoji-mart';
 import cn from 'classnames';
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 import Header from './components/Header';
 import Messages from './components/Messages';
@@ -85,11 +87,11 @@ function Conversation({
     window.removeEventListener('mousemove', resize, false);
     window.removeEventListener('mouseup', stopResize, false);
   }
-  
+
   const [pickerOffset, setOffset] = useState(0)
   const senderRef = useRef<ISenderRef>(null!);
-  const [pickerStatus, setPicket] = useState(false) 
- 
+  const [pickerStatus, setPicket] = useState(false)
+
   const onSelectEmoji = (emoji) => {
     senderRef.current?.onSelectEmoji(emoji)
   }
@@ -104,7 +106,7 @@ function Conversation({
   }
 
   return (
-    <div id="rcw-conversation-container" onMouseDown={initResize} 
+    <div id="rcw-conversation-container" onMouseDown={initResize}
       className={cn('rcw-conversation-container', className)} aria-live="polite">
       {resizable && <div className="rcw-conversation-resizer" />}
       <Header
@@ -120,10 +122,9 @@ function Conversation({
         showTimeStamp={showTimeStamp}
       />
       <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
-      {/*{emojis && pickerStatus && (<><Picker*/}
-      {/*  style={{ position: 'absolute', bottom: pickerOffset, left: '0', width: '100%' }}*/}
-      {/*  onSelect={onSelectEmoji}*/}
-      {/*/></>)}*/}
+      {emojis && pickerStatus && (<>
+        <Picker data={data} onEmojiSelect={onSelectEmoji} onClickOutside={togglePicker} />
+      </>)}
       <Sender
         ref={senderRef}
         sendMessage={handlerSendMsn}
