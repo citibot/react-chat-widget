@@ -126,9 +126,9 @@ function Sender({ sendMessage, placeholder, disabledInput, autofocus, onTextInpu
 
   return (
     <div ref={refContainer} className="rcw-sender">
-      <button className='rcw-picker-btn' type="submit" onClick={handlerPressEmoji}>
+      {/* <button className='rcw-picker-btn' type="submit" onClick={handlerPressEmoji}>
         <img src={emoji} className="rcw-picker-icon" alt="" />
-      </button>
+      </button> */}
       <div className={cn('rcw-new-message', {
           'rcw-message-disable': disabledInput,
         })
