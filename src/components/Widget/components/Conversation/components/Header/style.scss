@@ -8,15 +8,19 @@
     border-radius: 10px 10px 0 0;
     color: $white;
     display: flex;
-    flex-direction: column;
     text-align: center;
-    padding: 15px 0 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px
   }
 
   .rcw-title {
     font-size: 24px;
     margin: 0;
     padding: 15px 0;
+    text-align: left;
   }
 
   .rcw-close-button {

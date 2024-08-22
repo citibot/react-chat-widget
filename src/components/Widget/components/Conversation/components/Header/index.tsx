@@ -1,6 +1,6 @@
-const close = require('../../../../../../../assets/clear-button.svg') as string;
+const close = require("../../../../../../../assets/clear-button.svg") as string;
 
-import './style.scss';
+import "./style.scss";
 
 type Props = {
   title: string;
@@ -8,21 +8,30 @@ type Props = {
   toggleChat: () => void;
   showCloseButton: boolean;
   titleAvatar?: string;
-}
+};
 
-function Header({ title, subtitle, toggleChat, showCloseButton, titleAvatar }: Props) {
+function Header({
+  title,
+  subtitle,
+  toggleChat,
+  showCloseButton,
+  titleAvatar,
+}: Props) {
   return (
     <div className="rcw-header">
-      {showCloseButton &&
+      {showCloseButton && (
         <button className="rcw-close-button" onClick={toggleChat}>
           <img src={close} className="rcw-close" alt="close" />
         </button>
-      }
-      <h4 className="rcw-title">
-        {titleAvatar && <img src={titleAvatar} className="avatar" alt="profile" />}
-        {title}
-      </h4>
+      )}
+      {titleAvatar && (
+        <img src={titleAvatar} className="avatar" alt="profile" />
+      )}
+      <div>
+      <h4 className="rcw-title">{title}</h4>
       <span>{subtitle}</span>
+      </div>
+   
     </div>
   );
 }
