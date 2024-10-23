@@ -40,6 +40,22 @@ export function createLinkSnippet(link: LinkParams, id?: string) : Link {
   };
 }
 
+export function createNewFileMessage(
+  file: File,
+  sender: string,
+  id?: string,
+): MessageI {
+  return {
+    type: MESSAGES_TYPES.FILE,
+    component: Message,
+    file,
+    sender,
+    timestamp: new Date(),
+    showAvatar: true,
+    customId: id,
+    unread: sender === MESSAGE_SENDER.RESPONSE
+  };
+}
 export function createComponentMessage(component: ElementType, props: any, showAvatar: boolean, id?: string): CustomCompMessage {
   return {
     type: MESSAGES_TYPES.CUSTOM_COMPONENT,
