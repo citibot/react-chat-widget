@@ -12,7 +12,8 @@ type BaseMessage = {
 }
 
 export interface MessageTypes extends BaseMessage {
-  text: string;
+  text?: string;
+  file?: File;
 };
 
 export type QuickButtonTypes = {

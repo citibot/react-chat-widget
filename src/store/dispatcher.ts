@@ -8,6 +8,10 @@ export function addUserMessage(text: string, id?: string) {
   store.dispatch(actions.addUserMessage(text, id));
 }
 
+export function newFileUploaded(file: File, id?: string) {
+  store.dispatch(actions.newFileUploaded(file, id));
+}
+
 export function addResponseMessage(text: string, id?: string) {
   store.dispatch(actions.addResponseMessage(text, id));
 }

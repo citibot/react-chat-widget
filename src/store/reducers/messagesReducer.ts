@@ -1,7 +1,7 @@
 import { MessagesState } from '../types';
 
 import { createReducer } from '../../utils/createReducer';
-import { createNewMessage, createLinkSnippet, createComponentMessage } from '../../utils/messages';
+import { createNewMessage, createLinkSnippet, createComponentMessage, createNewFileMessage } from '../../utils/messages';
 import { MESSAGE_SENDER } from '../../constants';
 import {
   MessagesActions,
@@ -13,7 +13,8 @@ import {
   HIDE_AVATAR,
   DELETE_MESSAGES,
   MARK_ALL_READ,
-  SET_BADGE_COUNT
+  SET_BADGE_COUNT,
+  NEW_FILE_UPLOADED,
 } from '../actions/types';
 
 const initialState = {
@@ -33,6 +34,9 @@ const messagesReducer = {
 
   [ADD_COMPONENT_MESSAGE]: (state: MessagesState, { component, props, showAvatar, id }) =>
     ({ ...state, messages: [...state.messages, createComponentMessage(component, props, showAvatar, id)] }),
+  
+  [NEW_FILE_UPLOADED]: (state: MessagesState, { file, id }) =>
+    ({ ...state, messages: [...state.messages, createNewFileMessage(file, MESSAGE_SENDER.CLIENT, id)] }),
 
   [DROP_MESSAGES]: (state: MessagesState) => ({ ...state, messages: [] }),
 

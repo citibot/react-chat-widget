@@ -8,7 +8,8 @@ export const MESSAGES_TYPES = {
   SNIPPET: {
     LINK: 'snippet'
   },
-  CUSTOM_COMPONENT: 'component'
+  CUSTOM_COMPONENT: 'component',
+  FILE: 'file'
 };
 
 export const MESSAGE_BOX_SCROLL_DURATION = 400;
