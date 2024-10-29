@@ -77,7 +77,10 @@ function Sender(
   };
 
   const handlerSendMessage = (event?) => {
-    const file = event?.target?.files[0];
+    let file;
+    if (event?.target?.files?.length) {
+      file = event.target.files[0];
+    }
     if (file) {
       sendMessage(file);
     } else {
