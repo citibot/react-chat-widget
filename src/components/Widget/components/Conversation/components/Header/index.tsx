@@ -28,7 +28,7 @@ function Header({
         <img src={titleAvatar} className="avatar" alt="profile" />
       )}
       <div>
-      <h4 className="rcw-title">{title}</h4>
+      <h4 title={title} className="rcw-title">{title}</h4>
       <span>{subtitle}</span>
       </div>
    
