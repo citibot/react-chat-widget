@@ -9,14 +9,16 @@ import { MESSAGE_SENDER } from '../../../../../../constants';
 
 import Loader from './components/Loader';
 import './styles.scss';
+import { AnyObject } from 'src/utils/types';
 
 type Props = {
   showTimeStamp: boolean,
   profileAvatar?: string;
   profileClientAvatar?: string;
+  clientProps?: AnyObject;
 }
 
-function Messages({ profileAvatar, profileClientAvatar, showTimeStamp }: Props) {
+function Messages({ profileAvatar, profileClientAvatar, showTimeStamp, clientProps }: Props) {
   const dispatch = useDispatch();
   const { messages, typing, showChat, badgeCount } = useSelector((state: GlobalState) => ({
     messages: state.messages.messages,
@@ -28,7 +30,9 @@ function Messages({ profileAvatar, profileClientAvatar, showTimeStamp }: Props) 
   const messageRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     // @ts-ignore
-    scrollToBottom(messageRef.current);
+    if (!clientProps || !clientProps?.isFirstMessage) {
+      scrollToBottom(messageRef.current);
+    }
     if (showChat && badgeCount) dispatch(markAllMessagesRead());
     else dispatch(setBadgeCount(messages.filter((message) => message.unread).length));
   }, [messages, badgeCount, showChat]);

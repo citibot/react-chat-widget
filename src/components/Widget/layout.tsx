@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import cn from 'classnames';
 
 import { GlobalState } from 'src/store/types';
-import { AnyFunction } from 'src/utils/types';
+import { AnyFunction, AnyObject } from 'src/utils/types';
 import { openFullscreenPreview } from '../../store/actions';
 
 import Conversation from './components/Conversation';
@@ -38,7 +38,8 @@ type Props = {
   zoomStep?: number;
   showBadge?: boolean;
   resizable?: boolean;
-  emojis?: boolean
+  emojis?: boolean;
+  clientProps?: AnyObject;
 }
 
 function WidgetLayout({
@@ -67,7 +68,8 @@ function WidgetLayout({
   zoomStep,
   showBadge,
   resizable,
-  emojis
+  emojis,
+  clientProps,
 }: Props) {
   const dispatch = useDispatch();
   const { dissableInput, showChat, visible } = useSelector((state: GlobalState) => ({
@@ -147,6 +149,7 @@ function WidgetLayout({
           showTimeStamp={showTimeStamp}
           resizable={resizable}
           emojis={emojis}
+          clientProps={clientProps}
         />
       }
       {customLauncher ?

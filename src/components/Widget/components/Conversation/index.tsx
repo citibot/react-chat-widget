@@ -9,7 +9,7 @@ import Messages from './components/Messages';
 import Sender from './components/Sender';
 import QuickButtons from './components/QuickButtons';
 
-import { AnyFunction } from '../../../../utils/types';
+import { AnyFunction, AnyObject } from '../../../../utils/types';
 
 import './style.scss';
 
@@ -36,6 +36,7 @@ type Props = {
   showTimeStamp: boolean;
   resizable?: boolean;
   emojis?: boolean;
+  clientProps?: AnyObject;
 };
 
 function Conversation({
@@ -56,7 +57,8 @@ function Conversation({
   sendButtonAlt,
   showTimeStamp,
   resizable,
-  emojis
+  emojis,
+  clientProps,
 }: Props) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   let startX, startWidth;
@@ -120,6 +122,7 @@ function Conversation({
         profileAvatar={profileAvatar}
         profileClientAvatar={profileClientAvatar}
         showTimeStamp={showTimeStamp}
+        clientProps={clientProps}
       />
       <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
       {emojis && pickerStatus && (<>
