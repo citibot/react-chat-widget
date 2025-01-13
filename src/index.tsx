@@ -4,7 +4,7 @@ import Widget from './components/Widget';
 
 import store from  './store';
 
-import { AnyFunction } from './utils/types';
+import { AnyFunction, AnyObject } from './utils/types';
 
 type Props = {
   handleNewUserMessage: AnyFunction;
@@ -34,6 +34,7 @@ type Props = {
   handleSubmit?: AnyFunction;
   showBadge?: boolean;
   resizable?: boolean;
+  clientProps?: AnyObject;
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -63,7 +64,8 @@ function ConnectedWidget({
   handleSubmit,
   showBadge,
   resizable,
-  emojis
+  emojis,
+  clientProps
 }: Props) {
   return (
     <Provider store={store}>
@@ -95,6 +97,7 @@ function ConnectedWidget({
         showBadge={showBadge}
         resizable={resizable}
         emojis={emojis}
+        clientProps={clientProps}
       />
     </Provider>
   );

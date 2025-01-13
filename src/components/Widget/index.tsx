@@ -6,7 +6,7 @@ import {
   newFileUploaded,
 } from "../../store/actions";
 import { isWidgetOpened } from "../../store/dispatcher";
-import { AnyFunction } from "../../utils/types";
+import { AnyFunction, AnyObject } from "../../utils/types";
 
 import WidgetLayout from "./layout";
 
@@ -38,6 +38,7 @@ type Props = {
   showBadge?: boolean;
   resizable?: boolean;
   emojis?: boolean;
+  clientProps?: AnyObject;
 };
 
 function Widget({
@@ -68,6 +69,7 @@ function Widget({
   showBadge,
   resizable,
   emojis,
+  clientProps,
 }: Props) {
   const dispatch = useDispatch();
 
@@ -123,6 +125,7 @@ function Widget({
       showBadge={showBadge}
       resizable={resizable}
       emojis={emojis}
+      clientProps={clientProps}
     />
   );
 }
