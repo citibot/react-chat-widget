@@ -38,7 +38,6 @@ type Props = {
   showBadge?: boolean;
   resizable?: boolean;
   emojis?: boolean;
-  clientProps?: AnyObject;
 };
 
 function Widget({
@@ -69,7 +68,6 @@ function Widget({
   showBadge,
   resizable,
   emojis,
-  clientProps,
 }: Props) {
   const dispatch = useDispatch();
 
@@ -125,7 +123,6 @@ function Widget({
       showBadge={showBadge}
       resizable={resizable}
       emojis={emojis}
-      clientProps={clientProps}
     />
   );
 }
