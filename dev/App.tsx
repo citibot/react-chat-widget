@@ -4,6 +4,8 @@ import { Widget, addResponseMessage, setQuickButtons, toggleMsgLoader, addLinkSn
 import { addUserMessage } from '..';
 
 export default class App extends Component {
+  isWelcomeMsg = true;
+
   componentDidMount() {
     addResponseMessage('Welcome to this awesome chat!');
     addLinkSnippet({ link: 'https://google.com', title: 'Google' });
@@ -12,6 +14,7 @@ export default class App extends Component {
   }
 
   handleNewUserMessage = (newMessage: any) => {
+    this.isWelcomeMsg = false;
     toggleMsgLoader();
     setTimeout(() => {
       toggleMsgLoader();
