@@ -4,7 +4,7 @@ import Widget from './components/Widget';
 
 import store from  './store';
 
-import { AnyFunction, AnyObject } from './utils/types';
+import { AnyFunction } from './utils/types';
 
 type Props = {
   handleNewUserMessage: AnyFunction;
@@ -19,6 +19,7 @@ type Props = {
   profileAvatar?: string;
   profileClientAvatar?: string;
   launcher?: AnyFunction;
+  photoUploadIcon: boolean;
   handleTextInputChange?: (event: any) => void;
   chatId?: string;
   handleToggle?: AnyFunction;
@@ -26,7 +27,6 @@ type Props = {
   launcherCloseLabel?: string,
   launcherCloseImg?: string,
   launcherOpenImg?: string,
-  sendButtonAlt?: string;
   showTimeStamp?: boolean;
   imagePreview?: boolean;
   zoomStep?: number;
@@ -47,6 +47,7 @@ function ConnectedWidget({
   profileAvatar,
   profileClientAvatar,
   launcher,
+  photoUploadIcon,
   handleNewUserMessage,
   handleQuickButtonClicked,
   handleTextInputChange,
@@ -56,7 +57,6 @@ function ConnectedWidget({
   launcherCloseLabel,
   launcherCloseImg,
   launcherOpenImg,
-  sendButtonAlt,
   showTimeStamp,
   imagePreview,
   zoomStep,
@@ -80,6 +80,7 @@ function ConnectedWidget({
         fullScreenMode={fullScreenMode}
         autofocus={autofocus}
         customLauncher={launcher}
+        photoUploadIcon={photoUploadIcon}
         handleTextInputChange={handleTextInputChange}
         chatId={chatId}
         handleToggle={handleToggle}
@@ -87,7 +88,6 @@ function ConnectedWidget({
         launcherCloseLabel={launcherCloseLabel}
         launcherCloseImg={launcherCloseImg}
         launcherOpenImg={launcherOpenImg}
-        sendButtonAlt={sendButtonAlt}
         showTimeStamp={showTimeStamp}
         imagePreview={imagePreview}
         zoomStep={zoomStep} 

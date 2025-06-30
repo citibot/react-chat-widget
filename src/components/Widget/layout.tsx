@@ -26,13 +26,13 @@ type Props = {
   fullScreenMode: boolean;
   autofocus: boolean;
   customLauncher?: AnyFunction;
+  photoUploadIcon: boolean;
   onTextInputChange?: (event: any) => void;
   chatId: string;
   launcherOpenLabel: string;
   launcherCloseLabel: string;
   launcherCloseImg: string;
   launcherOpenImg: string;
-  sendButtonAlt: string;
   showTimeStamp: boolean;
   imagePreview?: boolean;
   zoomStep?: number;
@@ -55,13 +55,13 @@ function WidgetLayout({
   fullScreenMode,
   autofocus,
   customLauncher,
+  photoUploadIcon,
   onTextInputChange,
   chatId,
   launcherOpenLabel,
   launcherCloseLabel,
   launcherCloseImg,
   launcherOpenImg,
-  sendButtonAlt,
   showTimeStamp,
   imagePreview,
   zoomStep,
@@ -129,9 +129,11 @@ function WidgetLayout({
     >
       {showChat &&
         <Conversation
+          id={chatId}
           title={title}
           subtitle={subtitle}
           sendMessage={onSendMessage}
+          photoUploadIcon={photoUploadIcon}
           senderPlaceHolder={senderPlaceHolder}
           profileAvatar={profileAvatar}
           profileClientAvatar={profileClientAvatar}
@@ -143,7 +145,6 @@ function WidgetLayout({
           className={showChat ? 'active' : 'hidden'}
           onQuickButtonClicked={onQuickButtonClicked}
           onTextInputChange={onTextInputChange}
-          sendButtonAlt={sendButtonAlt}
           showTimeStamp={showTimeStamp}
           resizable={resizable}
           emojis={emojis}

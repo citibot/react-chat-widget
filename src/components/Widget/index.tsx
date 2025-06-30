@@ -6,7 +6,7 @@ import {
   newFileUploaded,
 } from "../../store/actions";
 import { isWidgetOpened } from "../../store/dispatcher";
-import { AnyFunction, AnyObject } from "../../utils/types";
+import { AnyFunction } from "../../utils/types";
 
 import WidgetLayout from "./layout";
 
@@ -21,6 +21,7 @@ type Props = {
   fullScreenMode: boolean;
   autofocus: boolean;
   customLauncher?: AnyFunction;
+  photoUploadIcon: boolean;
   handleNewUserMessage: AnyFunction;
   handleQuickButtonClicked?: AnyFunction;
   handleTextInputChange?: (event: any) => void;
@@ -30,7 +31,6 @@ type Props = {
   launcherCloseLabel: string;
   launcherOpenImg: string;
   launcherCloseImg: string;
-  sendButtonAlt: string;
   showTimeStamp: boolean;
   imagePreview?: boolean;
   zoomStep?: number;
@@ -51,6 +51,7 @@ function Widget({
   fullScreenMode,
   autofocus,
   customLauncher,
+  photoUploadIcon,
   handleNewUserMessage,
   handleQuickButtonClicked,
   handleTextInputChange,
@@ -60,7 +61,6 @@ function Widget({
   launcherCloseLabel,
   launcherCloseImg,
   launcherOpenImg,
-  sendButtonAlt,
   showTimeStamp,
   imagePreview,
   zoomStep,
@@ -110,13 +110,13 @@ function Widget({
       fullScreenMode={fullScreenMode}
       autofocus={autofocus}
       customLauncher={customLauncher}
+      photoUploadIcon={photoUploadIcon}
       onTextInputChange={handleTextInputChange}
       chatId={chatId}
       launcherOpenLabel={launcherOpenLabel}
       launcherCloseLabel={launcherCloseLabel}
       launcherCloseImg={launcherCloseImg}
       launcherOpenImg={launcherOpenImg}
-      sendButtonAlt={sendButtonAlt}
       showTimeStamp={showTimeStamp}
       imagePreview={imagePreview}
       zoomStep={zoomStep}
