@@ -20,12 +20,12 @@ function Header({
   return (
     <div className="rcw-header">
       {showCloseButton && (
-        <button className="rcw-close-button" onClick={toggleChat}>
+        <button className="rcw-close-button" onClick={toggleChat} aria-label="Close chat">
           <img src={close} className="rcw-close" alt="close" />
         </button>
       )}
       {titleAvatar && (
-        <img src={titleAvatar} className="avatar" alt="profile" />
+        <img src={titleAvatar} className="avatar" alt="" aria-hidden="true" />
       )}
       <div>
       <h4 title={title} className="rcw-title">{title}</h4>

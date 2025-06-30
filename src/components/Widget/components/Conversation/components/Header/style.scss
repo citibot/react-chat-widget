@@ -36,6 +36,11 @@
   }
 }
 
+.rcw-close-button:focus {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
+}
+
 .rcw-full-screen {
 
   .rcw-header {

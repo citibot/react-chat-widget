@@ -29,7 +29,7 @@ type Props = {
   disabledInput: boolean;
   autofocus: boolean;
   sendMessage: (event: any) => void;
-  buttonAlt: string;
+  photoUploadIcon: boolean;
   onPressEmoji: () => void;
   onChangeSize: (event: any) => void;
   onTextInputChange?: (event: any) => void;
@@ -38,11 +38,11 @@ type Props = {
 function Sender(
   {
     sendMessage,
+    photoUploadIcon,
     placeholder,
     disabledInput,
     autofocus,
     onTextInputChange,
-    buttonAlt,
     onPressEmoji,
     onChangeSize,
   }: Props,
@@ -58,6 +58,15 @@ function Sender(
 
   useEffect(() => {
     if (showChat && autofocus) inputRef.current?.focus();
+  }, [showChat]);
+
+  useEffect(() => {
+    if (showChat && inputRef?.current) {
+      const editable = inputRef.current.querySelector(
+        '[contenteditable="true"]'
+      );
+      (editable as HTMLElement | null)?.focus();
+    }
   }, [showChat]);
 
   useEffect(() => {
@@ -171,12 +180,16 @@ function Sender(
 
   return (
     <div ref={refContainer} className="rcw-sender">
+      <label htmlFor="message-input" className="sr-only">
+        {placeholder}
+      </label>
       <div
         className={cn("rcw-new-message", {
           "rcw-message-disable": disabledInput,
         })}
       >
         <div
+          id="message-input"
           spellCheck
           className="rcw-input"
           role="textbox"
@@ -187,26 +200,39 @@ function Sender(
           onKeyPress={handlerOnKeyPress}
           onKeyUp={handlerOnKeyUp}
           onKeyDown={handlerOnKeyDown}
+          aria-multiline="true"
+          aria-label={placeholder}
+          tabIndex={0}
         />
       </div>
-      <button
-        type="button"
-        className="rcw-upload-button"
-        onClick={handleUploadIconClick}
-      >
-        <img src={uploadIcon} className="rcw-upload-icon" alt="Upload" />
-      </button>
+      {photoUploadIcon && (
+        <>
+          <button
+            type="button"
+            className="rcw-upload-button"
+            onClick={handleUploadIconClick}
+            aria-label="Upload image"
+          >
+            <img src={uploadIcon} className="rcw-upload-icon" alt="" />
+          </button>
 
-      <input
-        type="file"
-        id="photo-upload-input"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        accept="image/*"
-        onChange={handleFileChange} // Handle file change
-      />
-      <button type="submit" className="rcw-send" onClick={handlerSendMessage}>
-        <img src={send} className="rcw-send-icon" alt={buttonAlt} />
+          <input
+            type="file"
+            id="photo-upload-input"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </>
+      )}
+      <button
+        type="submit"
+        className="rcw-send"
+        onClick={handlerSendMessage}
+        aria-label="Send message"
+      >
+        <img src={send} className="rcw-send-icon" alt="" />
       </button>
     </div>
   );

@@ -46,7 +46,11 @@ function Message({ message, showTimeStamp }: Props) {
       .render(message.text);
 
     return (
-      <div className={`rcw-${message.sender}`}>
+      <div
+        className={`rcw-${message.sender}`}
+        role="article"
+        aria-label={`Message from ${message.sender}`}
+      >
         <div
           className="rcw-message-text"
           dangerouslySetInnerHTML={{ __html: sanitizedHTML.replace(/\n$/, "") }}
@@ -61,7 +65,11 @@ function Message({ message, showTimeStamp }: Props) {
   }
   if (message.type === MESSAGES_TYPES.FILE && message.file) {
     return (
-      <div className={`rcw-${message.sender}`}>
+      <div
+        className={`rcw-${message.sender}`}
+        role="article"
+        aria-label={`Message from ${message.sender}`}
+      >
         <div className="rcw-message-text rcw-message-image-box">
           <img src={fileUrl} alt="Uploaded" className="rcw-message-img" />
         </div>

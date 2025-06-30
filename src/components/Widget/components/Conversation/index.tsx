@@ -1,23 +1,24 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from "react";
 // import { Picker } from 'emoji-mart';
-import cn from 'classnames';
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
+import cn from "classnames";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
-import Header from './components/Header';
-import Messages from './components/Messages';
-import Sender from './components/Sender';
-import QuickButtons from './components/QuickButtons';
+import Header from "./components/Header";
+import Messages from "./components/Messages";
+import Sender from "./components/Sender";
+import QuickButtons from "./components/QuickButtons";
 
-import { AnyFunction, AnyObject } from '../../../../utils/types';
+import { AnyFunction } from "../../../../utils/types";
 
-import './style.scss';
+import "./style.scss";
 
 interface ISenderRef {
   onSelectEmoji: (event: any) => void;
 }
 
 type Props = {
+  id: string;
   title: string;
   subtitle: string;
   senderPlaceHolder: string;
@@ -26,19 +27,20 @@ type Props = {
   autofocus: boolean;
   className: string;
   sendMessage: AnyFunction;
+  photoUploadIcon: boolean;
   toggleChat: AnyFunction;
   profileAvatar?: string;
   profileClientAvatar?: string;
   titleAvatar?: string;
   onQuickButtonClicked?: AnyFunction;
   onTextInputChange?: (event: any) => void;
-  sendButtonAlt: string;
   showTimeStamp: boolean;
   resizable?: boolean;
   emojis?: boolean;
 };
 
 function Conversation({
+  id,
   title,
   subtitle,
   senderPlaceHolder,
@@ -47,13 +49,13 @@ function Conversation({
   autofocus,
   className,
   sendMessage,
+  photoUploadIcon,
   toggleChat,
   profileAvatar,
   profileClientAvatar,
   titleAvatar,
   onQuickButtonClicked,
   onTextInputChange,
-  sendButtonAlt,
   showTimeStamp,
   resizable,
   emojis,
@@ -62,53 +64,67 @@ function Conversation({
   let startX, startWidth;
 
   useEffect(() => {
-    const containerDiv = document.getElementById('rcw-conversation-container');
+    const containerDiv = document.getElementById("rcw-conversation-container");
     setContainerDiv(containerDiv);
   }, []);
 
   const initResize = (e) => {
     if (resizable) {
       startX = e.clientX;
-      if (document.defaultView && containerDiv){
-        startWidth = parseInt(document.defaultView.getComputedStyle(containerDiv).width);
-        window.addEventListener('mousemove', resize, false);
-        window.addEventListener('mouseup', stopResize, false);
+      if (document.defaultView && containerDiv) {
+        startWidth = parseInt(
+          document.defaultView.getComputedStyle(containerDiv).width
+        );
+        window.addEventListener("mousemove", resize, false);
+        window.addEventListener("mouseup", stopResize, false);
       }
     }
-  }
+  };
 
   const resize = (e) => {
     if (containerDiv) {
-      containerDiv.style.width = (startWidth - e.clientX + startX) + 'px';
+      containerDiv.style.width = startWidth - e.clientX + startX + "px";
     }
-  }
+  };
 
   const stopResize = (e) => {
-    window.removeEventListener('mousemove', resize, false);
-    window.removeEventListener('mouseup', stopResize, false);
-  }
+    window.removeEventListener("mousemove", resize, false);
+    window.removeEventListener("mouseup", stopResize, false);
+  };
 
-  const [pickerOffset, setOffset] = useState(0)
+  const [pickerOffset, setOffset] = useState(0);
   const senderRef = useRef<ISenderRef>(null!);
-  const [pickerStatus, setPicket] = useState(false)
+  const [pickerStatus, setPicket] = useState(false);
 
   const onSelectEmoji = (emoji) => {
-    senderRef.current?.onSelectEmoji(emoji)
-  }
+    senderRef.current?.onSelectEmoji(emoji);
+  };
 
   const togglePicker = () => {
-    setPicket(prevPickerStatus => !prevPickerStatus)
-  }
+    setPicket((prevPickerStatus) => !prevPickerStatus);
+  };
 
   const handlerSendMsn = (event) => {
-    sendMessage(event)
-    if(pickerStatus) setPicket(false)
-  }
+    sendMessage(event);
+    if (pickerStatus) setPicket(false);
+  };
 
   return (
-    <div id="rcw-conversation-container" onMouseDown={initResize}
-      className={cn('rcw-conversation-container', className)} aria-live="polite">
-      {resizable && <div className="rcw-conversation-resizer" />}
+    <div
+      aria-label="Chat conversation"
+      role="region"
+      id="rcw-conversation-container"
+      onMouseDown={initResize}
+      className={cn("rcw-conversation-container", className)}
+      aria-live="polite"
+    >
+      {resizable && (
+        <div
+          className="rcw-conversation-resizer"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+      )}
       <Header
         title={title}
         subtitle={subtitle}
@@ -122,17 +138,29 @@ function Conversation({
         showTimeStamp={showTimeStamp}
       />
       <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
-      {emojis && pickerStatus && (<>
-        <Picker data={data} onEmojiSelect={onSelectEmoji} onClickOutside={togglePicker} style={{ position: 'absolute', bottom: pickerOffset, left: '0', width: '100%' }} />
-      </>)}
+      {emojis && pickerStatus && (
+        <>
+          <Picker
+            data={data}
+            onEmojiSelect={onSelectEmoji}
+            onClickOutside={togglePicker}
+            style={{
+              position: "absolute",
+              bottom: pickerOffset,
+              left: "0",
+              width: "100%",
+            }}
+          />
+        </>
+      )}
       <Sender
         ref={senderRef}
         sendMessage={handlerSendMsn}
+        photoUploadIcon={photoUploadIcon}
         placeholder={senderPlaceHolder}
         disabledInput={disabledInput}
         autofocus={autofocus}
         onTextInputChange={onTextInputChange}
-        buttonAlt={sendButtonAlt}
         onPressEmoji={togglePicker}
         onChangeSize={setOffset}
       />
