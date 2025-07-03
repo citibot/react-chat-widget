@@ -202,7 +202,7 @@ function Sender(
           onKeyDown={handlerOnKeyDown}
           aria-multiline="true"
           aria-label={placeholder}
-          tabIndex={0}
+          tabIndex={disabledInput ? -1 : 0}
         />
       </div>
       {photoUploadIcon && (
