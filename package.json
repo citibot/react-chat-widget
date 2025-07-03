@@ -1,6 +1,6 @@
 {
   "name": "@falkor/react-chat-widget",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Chat web widget for React apps",
   "main": "lib/index.js",
   "repository": "git@github.com:bhupesh-sf/react-chat-widget.git",
