@@ -46,7 +46,6 @@ function Launcher({
       className={cn("rcw-launcher", { "rcw-hide-sm": showChat })}
       onClick={toggleChat}
       aria-expanded={showChat}
-      aria-controls={chatId}
       aria-label={showChat ? closeLabel : openLabel}
     >
       {!showChat && showBadge && <Badge badge={badgeCount} />}
