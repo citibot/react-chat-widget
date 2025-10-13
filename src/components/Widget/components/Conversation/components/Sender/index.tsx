@@ -17,7 +17,6 @@ import {
   insertNodeAtCaret,
   getSelection,
 } from "../../../../../../utils/contentEditable";
-const send = require("../../../../../../../assets/send_button.svg") as string;
 const emoji = require("../../../../../../../assets/icon-smiley.svg") as string;
 const uploadIcon = require("../../../../../../../assets/icon-upload.svg") as string;
 const brRegex = /<br>/g;
@@ -30,6 +29,7 @@ type Props = {
   autofocus: boolean;
   sendMessage: (event: any) => void;
   photoUploadIcon: boolean;
+  messageButtonColor: string;
   onPressEmoji: () => void;
   onChangeSize: (event: any) => void;
   onTextInputChange?: (event: any) => void;
@@ -39,6 +39,7 @@ function Sender(
   {
     sendMessage,
     photoUploadIcon,
+    messageButtonColor,
     placeholder,
     disabledInput,
     autofocus,
@@ -232,7 +233,14 @@ function Sender(
         onClick={handlerSendMessage}
         aria-label="Send message"
       >
-        <img src={send} className="rcw-send-icon" alt="" />
+        <svg
+          viewBox="0 0 24 24"
+          className="rcw-send-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ fill: messageButtonColor }}
+        >
+          <polygon points="2,21 23,12 2,3 2,10 17,12 2,14" />
+        </svg>
       </button>
     </div>
   );
