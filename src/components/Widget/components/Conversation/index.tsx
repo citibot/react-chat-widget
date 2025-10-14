@@ -28,6 +28,7 @@ type Props = {
   className: string;
   sendMessage: AnyFunction;
   photoUploadIcon: boolean;
+  messageButtonColor: string;
   toggleChat: AnyFunction;
   profileAvatar?: string;
   profileClientAvatar?: string;
@@ -50,6 +51,7 @@ function Conversation({
   className,
   sendMessage,
   photoUploadIcon,
+  messageButtonColor,
   toggleChat,
   profileAvatar,
   profileClientAvatar,
@@ -157,6 +159,7 @@ function Conversation({
         ref={senderRef}
         sendMessage={handlerSendMsn}
         photoUploadIcon={photoUploadIcon}
+        messageButtonColor={messageButtonColor}
         placeholder={senderPlaceHolder}
         disabledInput={disabledInput}
         autofocus={autofocus}

@@ -27,6 +27,7 @@ type Props = {
   autofocus: boolean;
   customLauncher?: AnyFunction;
   photoUploadIcon: boolean;
+  messageButtonColor: string;
   onTextInputChange?: (event: any) => void;
   chatId: string;
   launcherOpenLabel: string;
@@ -56,6 +57,7 @@ function WidgetLayout({
   autofocus,
   customLauncher,
   photoUploadIcon,
+  messageButtonColor,
   onTextInputChange,
   chatId,
   launcherOpenLabel,
@@ -134,6 +136,7 @@ function WidgetLayout({
           subtitle={subtitle}
           sendMessage={onSendMessage}
           photoUploadIcon={photoUploadIcon}
+          messageButtonColor={messageButtonColor}
           senderPlaceHolder={senderPlaceHolder}
           profileAvatar={profileAvatar}
           profileClientAvatar={profileClientAvatar}

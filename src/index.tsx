@@ -20,6 +20,7 @@ type Props = {
   profileClientAvatar?: string;
   launcher?: AnyFunction;
   photoUploadIcon: boolean;
+  messageButtonColor: string;
   handleTextInputChange?: (event: any) => void;
   chatId?: string;
   handleToggle?: AnyFunction;
@@ -48,6 +49,7 @@ function ConnectedWidget({
   profileClientAvatar,
   launcher,
   photoUploadIcon,
+  messageButtonColor,
   handleNewUserMessage,
   handleQuickButtonClicked,
   handleTextInputChange,
@@ -81,6 +83,7 @@ function ConnectedWidget({
         autofocus={autofocus}
         customLauncher={launcher}
         photoUploadIcon={photoUploadIcon}
+        messageButtonColor={messageButtonColor}
         handleTextInputChange={handleTextInputChange}
         chatId={chatId}
         handleToggle={handleToggle}

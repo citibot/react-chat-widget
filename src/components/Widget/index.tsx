@@ -22,6 +22,7 @@ type Props = {
   autofocus: boolean;
   customLauncher?: AnyFunction;
   photoUploadIcon: boolean;
+  messageButtonColor: string;
   handleNewUserMessage: AnyFunction;
   handleQuickButtonClicked?: AnyFunction;
   handleTextInputChange?: (event: any) => void;
@@ -52,6 +53,7 @@ function Widget({
   autofocus,
   customLauncher,
   photoUploadIcon,
+  messageButtonColor,
   handleNewUserMessage,
   handleQuickButtonClicked,
   handleTextInputChange,
@@ -111,6 +113,7 @@ function Widget({
       autofocus={autofocus}
       customLauncher={customLauncher}
       photoUploadIcon={photoUploadIcon}
+      messageButtonColor={messageButtonColor}
       onTextInputChange={handleTextInputChange}
       chatId={chatId}
       launcherOpenLabel={launcherOpenLabel}
