@@ -37,6 +37,7 @@ type Props = {
   showTimeStamp: boolean;
   resizable?: boolean;
   emojis?: boolean;
+  acceptedImageTypes?: string[];
 };
 
 function Conversation({
@@ -59,6 +60,7 @@ function Conversation({
   showTimeStamp,
   resizable,
   emojis,
+  acceptedImageTypes,
 }: Props) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   let startX, startWidth;
@@ -163,6 +165,7 @@ function Conversation({
         onTextInputChange={onTextInputChange}
         onPressEmoji={togglePicker}
         onChangeSize={setOffset}
+        acceptedImageTypes={acceptedImageTypes}
       />
     </div>
   );

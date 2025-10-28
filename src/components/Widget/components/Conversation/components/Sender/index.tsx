@@ -33,6 +33,7 @@ type Props = {
   onPressEmoji: () => void;
   onChangeSize: (event: any) => void;
   onTextInputChange?: (event: any) => void;
+  acceptedImageTypes?: string[];
 };
 
 function Sender(
@@ -45,6 +46,7 @@ function Sender(
     onTextInputChange,
     onPressEmoji,
     onChangeSize,
+    acceptedImageTypes = ['image/*'],
   }: Props,
   ref
 ) {
@@ -55,6 +57,7 @@ function Sender(
   const [firefox, setFirefox] = useState(false);
   const [height, setHeight] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const acceptedTypesString = acceptedImageTypes.join(',');
 
   useEffect(() => {
     if (showChat && autofocus) inputRef.current?.focus();
@@ -221,7 +224,7 @@ function Sender(
             id="photo-upload-input"
             ref={fileInputRef}
             style={{ display: "none" }}
-            accept="image/*"
+            accept={acceptedTypesString}
             onChange={handleFileChange}
           />
         </>

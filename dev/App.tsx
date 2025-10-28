@@ -49,7 +49,8 @@ export default class App extends Component {
         handleQuickButtonClicked={this.handleQuickButtonClicked}
         imagePreview
         handleSubmit={this.handleSubmit}
-        emojis
+        photoUploadIcon={true}
+        acceptedImageTypes={['image/jpeg', 'image/png']}
       />
     );
   }
