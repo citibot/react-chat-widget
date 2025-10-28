@@ -35,6 +35,7 @@ type Props = {
   handleSubmit?: AnyFunction;
   showBadge?: boolean;
   resizable?: boolean;
+  acceptedImageTypes? : string[];
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -65,7 +66,8 @@ function ConnectedWidget({
   handleSubmit,
   showBadge,
   resizable,
-  emojis
+  emojis,
+  acceptedImageTypes
 }: Props) {
   return (
     <Provider store={store}>
@@ -98,6 +100,7 @@ function ConnectedWidget({
         showBadge={showBadge}
         resizable={resizable}
         emojis={emojis}
+        acceptedImageTypes={acceptedImageTypes}
       />
     </Provider>
   );
