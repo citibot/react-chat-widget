@@ -36,6 +36,7 @@ type Props = {
   showBadge?: boolean;
   resizable?: boolean;
   acceptedImageTypes? : string[];
+  isOpen: boolean;
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -67,7 +68,8 @@ function ConnectedWidget({
   showBadge,
   resizable,
   emojis,
-  acceptedImageTypes
+  acceptedImageTypes,
+  isOpen,
 }: Props) {
   return (
     <Provider store={store}>
@@ -101,6 +103,7 @@ function ConnectedWidget({
         resizable={resizable}
         emojis={emojis}
         acceptedImageTypes={acceptedImageTypes}
+        isOpen={isOpen}
       />
     </Provider>
   );

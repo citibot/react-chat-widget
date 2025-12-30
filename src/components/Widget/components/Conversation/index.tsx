@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-// import { Picker } from 'emoji-mart';
 import cn from "classnames";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
@@ -39,6 +38,21 @@ type Props = {
   resizable?: boolean;
   emojis?: boolean;
   acceptedImageTypes?: string[];
+  isOpen: boolean; // Add this prop to track dialog open state
+};
+
+// Utility function to get all focusable elements
+const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
+  const focusableSelectors = [
+    "a[href]",
+    "button:not([disabled])",
+    "textarea:not([disabled])",
+    "input:not([disabled])",
+    "select:not([select])",
+    '[tabindex]:not([tabindex="-1"])',
+  ].join(", ");
+
+  return Array.from(container.querySelectorAll(focusableSelectors));
 };
 
 function Conversation({
@@ -63,14 +77,102 @@ function Conversation({
   resizable,
   emojis,
   acceptedImageTypes,
+  isOpen,
 }: Props) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const previousActiveElementRef = useRef<HTMLElement | null>(null);
   let startX, startWidth;
 
   useEffect(() => {
     const containerDiv = document.getElementById("rcw-conversation-container");
     setContainerDiv(containerDiv);
   }, []);
+
+  // Focus Trap Implementation
+  useEffect(() => {
+    if (!isOpen || !containerRef.current) return;
+
+    const container = containerRef.current;
+
+    // Store the element that opened the dialog
+    previousActiveElementRef.current = document.activeElement as HTMLElement;
+
+    // Get all focusable elements
+    const focusableElements = getFocusableElements(container);
+
+    if (focusableElements.length === 0) return;
+
+    // Move focus to the close button (first element) when dialog opens
+    setTimeout(() => {
+      const closeButton = container.querySelector(
+        ".rcw-close-button"
+      ) as HTMLElement;
+      if (closeButton) {
+        closeButton.focus();
+      } else if (focusableElements[0]) {
+        focusableElements[0].focus();
+      }
+    }, 100);
+
+    // Handle Tab key to trap focus (cyclic navigation)
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+
+      const currentFocusableElements = getFocusableElements(container);
+
+      if (currentFocusableElements.length === 0) return;
+
+      const firstElement = currentFocusableElements[0];
+      const lastElement =
+        currentFocusableElements[currentFocusableElements.length - 1];
+
+      // Shift + Tab (backward navigation)
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      }
+      // Tab (forward navigation)
+      else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    // Handle Escape key to close dialog
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        toggleChat();
+      }
+    };
+
+    // Add event listeners
+    container.addEventListener("keydown", handleTabKey);
+    container.addEventListener("keydown", handleEscapeKey);
+
+    // Cleanup function
+    return () => {
+      container.removeEventListener("keydown", handleTabKey);
+      container.removeEventListener("keydown", handleEscapeKey);
+
+      // Return focus to the element that opened the dialog
+      if (previousActiveElementRef.current && !isOpen) {
+        previousActiveElementRef.current.focus();
+      }
+    };
+  }, [isOpen, toggleChat]);
+
+  // Return focus when dialog closes
+  useEffect(() => {
+    if (!isOpen && previousActiveElementRef.current) {
+      previousActiveElementRef.current.focus();
+    }
+  }, [isOpen]);
 
   const initResize = (e) => {
     if (resizable) {
@@ -115,8 +217,10 @@ function Conversation({
 
   return (
     <div
+      ref={containerRef}
       aria-label="Chat conversation"
-      role="region"
+      role="dialog"
+      aria-modal="true"
       id="rcw-conversation-container"
       onMouseDown={initResize}
       className={cn("rcw-conversation-container", className)}

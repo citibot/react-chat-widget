@@ -33,6 +33,7 @@ type Props = {
   launcherOpenImg: string;
   launcherCloseImg: string;
   showTimeStamp: boolean;
+  isOpen: boolean;
   imagePreview?: boolean;
   zoomStep?: number;
   handleSubmit?: AnyFunction;
@@ -72,6 +73,7 @@ function Widget({
   resizable,
   emojis,
   acceptedImageTypes,
+  isOpen
 }: Props) {
   const dispatch = useDispatch();
 
@@ -129,6 +131,7 @@ function Widget({
       resizable={resizable}
       emojis={emojis}
       acceptedImageTypes={acceptedImageTypes}
+      isOpen={isOpen}
     />
   );
 }
