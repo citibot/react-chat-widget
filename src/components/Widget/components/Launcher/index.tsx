@@ -47,6 +47,7 @@ function Launcher({
       onClick={toggleChat}
       aria-expanded={showChat}
       aria-label={showChat ? closeLabel : openLabel}
+      aria-labelledby="chat-launcher-label"
     >
       {!showChat && showBadge && <Badge badge={badgeCount} />}
       {showChat ? (
@@ -62,7 +63,7 @@ function Launcher({
           alt={openLabel}
         />
       )}
-      <span className="sr-only">{showChat ? closeLabel : openLabel}</span>
+      <span id="chat-launcher-label" className="sr-only">Let's chat</span>
     </button>
   );
 }

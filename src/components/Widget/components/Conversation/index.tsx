@@ -148,6 +148,9 @@ function Conversation({
       if (e.key === "Escape") {
         e.preventDefault();
         toggleChat();
+        if (window.parent !== window) {
+          window.parent.postMessage({ type: "CHATBOT_CLOSED_BY_ESCAPE" }, "*");
+        }
       }
     };
 
@@ -159,18 +162,15 @@ function Conversation({
     return () => {
       container.removeEventListener("keydown", handleTabKey);
       container.removeEventListener("keydown", handleEscapeKey);
-
-      // Return focus to the element that opened the dialog
-      if (previousActiveElementRef.current && !isOpen) {
-        previousActiveElementRef.current.focus();
-      }
     };
   }, [isOpen, toggleChat]);
 
   // Return focus when dialog closes
   useEffect(() => {
     if (!isOpen && previousActiveElementRef.current) {
-      previousActiveElementRef.current.focus();
+      setTimeout(() => {
+        previousActiveElementRef.current?.focus();
+      }, 0);
     }
   }, [isOpen]);
 
