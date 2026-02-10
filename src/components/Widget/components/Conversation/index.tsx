@@ -48,11 +48,27 @@ const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
     "button:not([disabled])",
     "textarea:not([disabled])",
     "input:not([disabled])",
-    "select:not([select])",
+    "select:not([disabled])",
     '[tabindex]:not([tabindex="-1"])',
   ].join(", ");
 
-  return Array.from(container.querySelectorAll(focusableSelectors));
+  const elements = Array.from(
+    container.querySelectorAll<HTMLElement>(focusableSelectors)
+  );
+
+  // Filter out elements that are not visible or aria-hidden
+  return elements.filter((el) => {
+    // Check if element is visible
+    const style = window.getComputedStyle(el);
+    if (
+      style.display === "none" ||
+      style.visibility === "hidden" ||
+      el.getAttribute("aria-hidden") === "true"
+    ) {
+      return false;
+    }
+    return true;
+  });
 };
 
 function Conversation({
@@ -79,6 +95,7 @@ function Conversation({
   acceptedImageTypes,
   isOpen,
 }: Props) {
+  isOpen = true;
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   const containerRef = useRef<HTMLDivElement>(null);
   const previousActiveElementRef = useRef<HTMLElement | null>(null);
@@ -98,20 +115,13 @@ function Conversation({
     // Store the element that opened the dialog
     previousActiveElementRef.current = document.activeElement as HTMLElement;
 
-    // Get all focusable elements
-    const focusableElements = getFocusableElements(container);
-
-    if (focusableElements.length === 0) return;
-
-    // Move focus to the close button (first element) when dialog opens
+    // Move focus to the close button when dialog opens
     setTimeout(() => {
       const closeButton = container.querySelector(
         ".rcw-close-button"
       ) as HTMLElement;
       if (closeButton) {
         closeButton.focus();
-      } else if (focusableElements[0]) {
-        focusableElements[0].focus();
       }
     }, 100);
 
@@ -123,22 +133,44 @@ function Conversation({
 
       if (currentFocusableElements.length === 0) return;
 
-      const firstElement = currentFocusableElements[0];
-      const lastElement =
-        currentFocusableElements[currentFocusableElements.length - 1];
+      const activeElement = document.activeElement as HTMLElement;
+
+      // Check if active element is inside our container
+      if (!container.contains(activeElement)) {
+        // Focus escaped somehow, bring it back
+        e.preventDefault();
+        currentFocusableElements[0].focus();
+        return;
+      }
+
+      const currentIndex = currentFocusableElements.indexOf(activeElement);
 
       // Shift + Tab (backward navigation)
       if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
+        if (currentIndex <= 0) {
           e.preventDefault();
-          lastElement.focus();
+          currentFocusableElements[currentFocusableElements.length - 1].focus();
         }
       }
       // Tab (forward navigation)
       else {
-        if (document.activeElement === lastElement) {
+        if (currentIndex >= currentFocusableElements.length - 1) {
           e.preventDefault();
-          firstElement.focus();
+          currentFocusableElements[0].focus();
+        }
+      }
+    };
+
+    // Backup: catch focus leaving the document
+    const handleDocumentFocus = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+
+      // If focus moved outside our container
+      if (target && !container.contains(target)) {
+        e.preventDefault();
+        const focusableElements = getFocusableElements(container);
+        if (focusableElements.length > 0) {
+          focusableElements[focusableElements.length - 1].focus();
         }
       }
     };
@@ -155,13 +187,15 @@ function Conversation({
     };
 
     // Add event listeners
-    container.addEventListener("keydown", handleTabKey);
-    container.addEventListener("keydown", handleEscapeKey);
+    document.addEventListener("keydown", handleTabKey, true);
+    document.addEventListener("keydown", handleEscapeKey);
+    document.addEventListener("focus", handleDocumentFocus, true);
 
     // Cleanup function
     return () => {
-      container.removeEventListener("keydown", handleTabKey);
-      container.removeEventListener("keydown", handleEscapeKey);
+      document.removeEventListener("keydown", handleTabKey, true);
+      document.removeEventListener("keydown", handleEscapeKey);
+      document.removeEventListener("focus", handleDocumentFocus, true);
     };
   }, [isOpen, toggleChat]);
 
