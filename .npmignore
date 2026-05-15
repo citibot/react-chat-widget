@@ -7,6 +7,8 @@ assets
 mocks
 coverage
 a11y-results.md
+a11y-fixture-results.md
+a11y-local-webchat-results.md
 a11y-widget-fixture.html
 local-chat-widget.html
 local-webchat

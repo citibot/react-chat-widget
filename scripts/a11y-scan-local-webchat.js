@@ -102,11 +102,11 @@ function renderSummary(results) {
 
   const results = [];
 
-  await frame.waitForSelector(".rcw-launcher", { timeout: selectorTimeout });
+  await frame.waitForSelector(".launcherBtn", { timeout: selectorTimeout });
   results.push(await runAxe(page, "Collapsed web chat host page"));
   results.push(await runAxe(frame, "Collapsed web chat iframe"));
 
-  await frame.click(".rcw-launcher");
+  await frame.click(".launcherBtn");
   await frame.waitForSelector("#rcw-conversation-container", {
     timeout: selectorTimeout,
   });
