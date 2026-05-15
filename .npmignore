@@ -6,6 +6,17 @@ assets
 
 mocks
 coverage
+a11y-results.md
+a11y-widget-fixture.html
+local-chat-widget.html
+local-webchat
+.local-web-chat-ui-build
+.env
+.env.*
+.env-example
+.github
+.idea
+scripts
 
 circle.yml
 .babelrc

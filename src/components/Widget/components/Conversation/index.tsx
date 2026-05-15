@@ -42,7 +42,7 @@ type Props = {
 };
 
 // Utility function to get all focusable elements
-const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
+export const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
   const focusableSelectors = [
     "a[href]",
     "button:not([disabled])",
@@ -56,14 +56,15 @@ const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
     container.querySelectorAll<HTMLElement>(focusableSelectors)
   );
 
-  // Filter out elements that are not visible or aria-hidden
+  // Filter out elements that are not visible or hidden from assistive tech
   return elements.filter((el) => {
     // Check if element is visible
     const style = window.getComputedStyle(el);
     if (
       style.display === "none" ||
       style.visibility === "hidden" ||
-      el.getAttribute("aria-hidden") === "true"
+      el.closest('[aria-hidden="true"]') ||
+      el.closest("[hidden]")
     ) {
       return false;
     }

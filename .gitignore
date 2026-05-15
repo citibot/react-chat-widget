@@ -7,9 +7,19 @@ yarn-error.log
 .DS_Store
 
 # Build files
+.env
+local-chat-widget.html
+local-webchat/
+.local-web-chat-ui-build/
 
 # Test files
 coverage
+a11y-results.md
+a11y-fixture-results.md
+a11y-local-webchat-results.md
+a11y-widget-fixture.html
 
 # vscode
 .vscode
+.idea
+.idea/*

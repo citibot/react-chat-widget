@@ -1,0 +1,159 @@
+name: ADA Compliance Check
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  create:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  axe-accessibility:
+    name: Axe WCAG scans
+    if: github.event_name != 'create' || github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout react-chat-widget
+        uses: actions/checkout@v4
+        with:
+          path: react-chat-widget
+
+      - name: Checkout falkor-mono
+        uses: actions/checkout@v4
+        with:
+          repository: citibot/falkor-mono
+          token: ${{ secrets.FALKOR_MONO_CHECKOUT_TOKEN || github.token }}
+          ref: stage
+          path: falkor-mono
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.12.0
+          cache: npm
+          cache-dependency-path: react-chat-widget/package-lock.json
+
+      - name: Install dependencies
+        working-directory: react-chat-widget
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        working-directory: react-chat-widget
+        run: npx playwright install --with-deps chromium
+
+      - name: Build local widget bundle
+        working-directory: react-chat-widget
+        run: npm run build
+
+      - name: Start local static server
+        working-directory: react-chat-widget
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 &
+          echo $! > /tmp/react-chat-widget-server.pid
+
+      - name: Run bundle fixture ADA scan
+        id: fixture_scan
+        working-directory: react-chat-widget
+        continue-on-error: true
+        env:
+          A11Y_SUMMARY_PATH: a11y-fixture-results.md
+        run: npm run a11y:fixture
+
+      - name: Write local web chat env
+        working-directory: react-chat-widget
+        run: |
+          cat > .env <<'EOF'
+          ACCOUNT_ID=${{ secrets.ADA_ACCOUNT_ID }}
+          STAGE_API_BASE_URL=${{ secrets.ADA_STAGE_API_BASE_URL }}
+          STAGE_ENGINE_BASE_URL=${{ secrets.ADA_STAGE_ENGINE_BASE_URL }}
+          STAGE_TRANSLATE_URL=${{ secrets.ADA_STAGE_TRANSLATE_URL }}
+          CONFIG_TOKEN=${{ secrets.ADA_CONFIG_TOKEN }}
+          ENGINE_TOKEN=${{ secrets.ADA_ENGINE_TOKEN }}
+          USER_AVATAR=${{ secrets.ADA_USER_AVATAR }}
+          DEFAULT_ACCOUNT_ICON_SIZE=${{ secrets.ADA_DEFAULT_ACCOUNT_ICON_SIZE }}
+          LOCAL_WEB_CHAT_URL=http://127.0.0.1:4173/local-webchat
+          REACT_APP_SPEAKER=${{ secrets.ADA_REACT_APP_SPEAKER }}
+          REACT_APP_SPEAKER_MUTE=${{ secrets.ADA_REACT_APP_SPEAKER_MUTE }}
+          REACT_APP_CITIBOT_LANDING_PAGE_URL=${{ secrets.ADA_REACT_APP_CITIBOT_LANDING_PAGE_URL }}
+          EOF
+
+      - name: Build local web chat embed
+        id: local_webchat_build
+        working-directory: react-chat-widget
+        continue-on-error: true
+        env:
+          FALKOR_MONO_PATH: ${{ github.workspace }}/falkor-mono
+        run: npm run build-local
+
+      - name: Run local web chat ADA scan
+        id: local_webchat_scan
+        if: always() && steps.local_webchat_build.outcome == 'success'
+        working-directory: react-chat-widget
+        continue-on-error: true
+        env:
+          A11Y_SUMMARY_PATH: a11y-local-webchat-results.md
+        run: npm run a11y:local-webchat
+
+      - name: Ensure local web chat result exists
+        if: always() && steps.local_webchat_scan.outcome == 'skipped'
+        working-directory: react-chat-widget
+        run: |
+          cat > a11y-local-webchat-results.md <<'EOF'
+          ## ADA Compliance Check - Local Web Chat Embed
+
+          The local web chat scan did not run because the local web chat build failed or was skipped. Check the workflow logs for the build failure.
+          EOF
+
+      - name: Post fixture PR comment
+        if: always() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: react-chat-widget/a11y-fixture-results.md
+          header: ADA Compliance Check - Bundle Fixture
+
+      - name: Post local web chat PR comment
+        if: always() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: react-chat-widget/a11y-local-webchat-results.md
+          header: ADA Compliance Check - Local Web Chat
+
+      - name: Upload fixture ADA results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ada-fixture-results-${{ github.sha }}
+          path: react-chat-widget/a11y-fixture-results.md
+          retention-days: 30
+
+      - name: Upload local web chat ADA results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ada-local-webchat-results-${{ github.sha }}
+          path: react-chat-widget/a11y-local-webchat-results.md
+          retention-days: 30
+
+      - name: Stop local static server
+        if: always()
+        run: |
+          if [ -f /tmp/react-chat-widget-server.pid ]; then
+            kill "$(cat /tmp/react-chat-widget-server.pid)" || true
+          fi
+
+      - name: Fail on ADA errors
+        if: always()
+        run: |
+          if [ "${{ steps.fixture_scan.outcome }}" != "success" ] || \
+             [ "${{ steps.local_webchat_build.outcome }}" != "success" ] || \
+             [ "${{ steps.local_webchat_scan.outcome }}" != "success" ]; then
+            exit 1
+          fi
