@@ -151,9 +151,32 @@ jobs:
 
       - name: Fail on ADA errors
         if: always()
+        working-directory: react-chat-widget
         run: |
+          failed=0
+
           if [ "${{ steps.fixture_scan.outcome }}" != "success" ] || \
              [ "${{ steps.local_webchat_build.outcome }}" != "success" ] || \
              [ "${{ steps.local_webchat_scan.outcome }}" != "success" ]; then
+            failed=1
+          fi
+
+          echo "Bundle fixture scan: ${{ steps.fixture_scan.outcome }}"
+          echo "Local web chat build: ${{ steps.local_webchat_build.outcome }}"
+          echo "Local web chat scan: ${{ steps.local_webchat_scan.outcome }}"
+
+          if [ -f a11y-fixture-results.md ]; then
+            echo ""
+            echo "===== Bundle fixture ADA results ====="
+            cat a11y-fixture-results.md
+          fi
+
+          if [ -f a11y-local-webchat-results.md ]; then
+            echo ""
+            echo "===== Local web chat ADA results ====="
+            cat a11y-local-webchat-results.md
+          fi
+
+          if [ "$failed" -ne 0 ]; then
             exit 1
           fi
