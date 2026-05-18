@@ -10,6 +10,10 @@
   "scripts": {
     "start": "webpack serve --config webpack.config.dev.js",
     "build": "webpack --config ./webpack.config.prod.js",
+    "build-local": "npm run build && node scripts/build-local-webchat.js",
+    "a11y:fixture:build": "node scripts/build-a11y-fixture.js",
+    "a11y:fixture": "npm run a11y:fixture:build && node scripts/a11y-scan-widget-fixture.js",
+    "a11y:local-webchat": "node scripts/a11y-scan-local-webchat.js",
     "test": "jest --coverage"
   },
   "keywords": [
@@ -48,6 +52,7 @@
     "@types/react-dom": "^18.2.0",
     "@types/react-redux": "^7.1.7",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "axe-core": "^4.10.2",
     "autoprefixer": "^8.2.0",
     "babel-jest": "^29.5.0",
     "babel-loader": "^8.2.2",
@@ -73,6 +78,7 @@
     "postcss-preset-env": "^6.7.0",
     "prettier": "^1.1.0",
     "prettier-eslint": "^9.0.2",
+    "playwright": "^1.52.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "redux-mock-store": "^1.5.4",

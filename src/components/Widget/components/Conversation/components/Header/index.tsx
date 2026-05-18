@@ -24,11 +24,9 @@ function Header({
           <img src={close} className="rcw-close" alt="close" />
         </button>
       )}
-      {titleAvatar && (
-        <img src={titleAvatar} className="avatar" alt="" aria-hidden="true" />
-      )}
+      {titleAvatar && <img src={titleAvatar} className="avatar" alt="" />}
       <div>
-      <h4 title={title} className="rcw-title">{title}</h4>
+          <h2 title={title} className="rcw-title">{title}</h2>
       <span>{subtitle}</span>
       </div>
    
